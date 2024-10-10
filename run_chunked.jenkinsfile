@@ -1,0 +1,22 @@
+pipeline {
+    agent {label 'specify-your-label-here-for-best-perf'}
+    parameters {
+        text(name: 'LIST', description: 'List of stuff to process as a batch here')
+        booleanParam(defaultValue: false, description: 'Enable debug mode', name: 'DEBUG')
+    }
+    options { 
+        quietPeriod(0)
+        buildDiscarder(logRotator(numToKeepStr: '2000'))
+    }
+
+    stages {
+        stage("Scan IP address") {
+            agent {label 'specify-your-label-here-for-best-perf'}
+            steps {
+                script {
+                    println "${params.LIST}"
+                }
+            }
+        }
+    }
+}

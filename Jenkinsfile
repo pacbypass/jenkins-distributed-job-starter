@@ -26,21 +26,6 @@ pipeline {
                     def targetLists = generateLists(params.FILENAME, params.LIMIT.toInteger())
                     def chunkSize = Math.max(1, (int)(targetLists.size() / threads))
                     def dividedTargetLists = targetLists.collate(chunkSize)
-                    
-                    // If there are less than threads elements, pad the list with empty lists
-                    while (dividedTargetLists.size() < threads) {
-                        dividedTargetLists.add([])
-                    }
-                    
-                    // If there are more than threads lists, combine the excess into the last list
-                    if (dividedTargetLists.size() > threads) {
-                        def excessSize = dividedTargetLists.size() - threads
-                        def excess = []
-                        excessSize.times {
-                            excess.addAll(dividedTargetLists.removeLast())
-                        }
-                        dividedTargetLists[threads-1].addAll(excess)
-                    }
                                         
                     if (params.DEBUG) {
                         println "archiving our lists"
